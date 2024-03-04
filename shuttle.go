@@ -6,6 +6,7 @@ import (
 	"context"
 	"bytes"
 	"io"
+	"mime/multipart"
 )
 
 const APIBaseURL = "https://api.shuttleai.app"
@@ -37,7 +38,21 @@ func (sh *ShuttleClient) post(ctx context.Context, task string, contentType stri
 
 	switch v := payload.(type) {
 	case []byte:
-		body = bytes.NewReader(v)
+		rBody := &bytes.Buffer{}
+	writer := multipart.NewWriter(rBody)
+
+	// Add the audio data to the form
+	part, err := writer.CreateFormFile("file", "audio.mp3")
+	if err != nil {
+		fmt.Println("Error creating form file:", err)
+		return nil, err
+	}
+	_, err = io.Copy(part, bytes.NewReader(v))
+	if err != nil {
+		fmt.Println("Error copying audio data to form:", err)
+		return nil, err
+	}
+	body = io.NopCloser(body)
 	default:
 		jsonBody, err := json.Marshal(payload)
 		if err != nil {
