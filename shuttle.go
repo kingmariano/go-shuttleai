@@ -31,27 +31,40 @@ func NewClient(apikey string) *ShuttleClient {
 	}
 }
 
-func (sh *ShuttleClient) post(ctx context.Context, task string, contentType string , payload any) ([]byte, error) {
+func (sh *ShuttleClient) post(ctx context.Context, task string, contentType string, payload interface{}) ([]byte, error) {
 	url := sh.resolveURL(task)
-	body, err := json.Marshal(payload)
-	if err != nil {
-		return nil, err
+	var body io.Reader
+
+	switch v := payload.(type) {
+	case []byte:
+		body = bytes.NewReader(v)
+	default:
+		jsonBody, err := json.Marshal(payload)
+		if err != nil {
+			return nil, err
+		}
+		body = bytes.NewReader(jsonBody)
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, bytes.NewReader(body))
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Content-Type", contentType)
-	req.Header.Set("Accept", "application/json")
-	if sh.ApiKey != "" {
-		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", sh.ApiKey))
-	}
-	res, err := sh.Httpclient.Do(req)
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, body)
 	if err != nil {
 		return nil, err
 	}
 
+	if contentType != "" {
+		req.Header.Set("Content-Type", contentType)
+	}
+	req.Header.Set("Accept", "application/json")
+	if sh.ApiKey != "" {
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", sh.ApiKey))
+	}
+
+	res, err := sh.Httpclient.Do(req)
+	if err != nil {
+		return nil, err
+	}
 	defer res.Body.Close()
+
 	resBody, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
@@ -67,6 +80,7 @@ func (sh *ShuttleClient) post(ctx context.Context, task string, contentType stri
 
 	return resBody, nil
 }
+
 
 func (oc *ShuttleClient) resolveURL(task string) string {
 
