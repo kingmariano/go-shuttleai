@@ -16,14 +16,13 @@ type AudioGenRequest struct {
 }
 
 type AudioGenResponse struct {
-	Chars int `json:"chars"`
-	Data  []struct {
+	Data struct {
 		URL string `json:"url"`
 	} `json:"data"`
 	ExpiresIn int    `json:"expiresIn"`
 	Model     string `json:"model"`
+	Chars     int    `json:"chars"`
 }
-
 func (sh *ShuttleClient) AudioGeneration(ctx context.Context, req *AudioGenRequest) (*AudioGenResponse, error) {
 	if len(req.Input) == 0 {
 		return nil, errors.New("input text is required")
