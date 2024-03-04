@@ -7,7 +7,7 @@
 ```
 go get github.com/charlesozo/go-shuttleai
 ```
-## Oxygen AI documentation
+## Shuttle AI documentation
 > Visit [Discord server](https://discord.gg/shuttleai "Visit ShuttleAi discord server") to get the $OXYGEN_API_KEY and  Run `/getkey` command in the Discord server.
 
 ___[shuttle api docs](https://docs.shuttleai.app/ "Visit ShuttleAi")___
