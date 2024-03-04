@@ -1,12 +1,13 @@
 package shuttle
+
 import (
-	"net/http"
-	"fmt"
-	"encoding/json"
-	"context"
 	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
 	"io"
 	"mime/multipart"
+	"net/http"
 )
 
 const APIBaseURL = "https://api.shuttleai.app"
@@ -17,7 +18,7 @@ type HTTPClient interface {
 
 type ShuttleClient struct {
 	Httpclient HTTPClient
-	ApiKey      string
+	ApiKey     string
 	Baseurl    string
 }
 type ErrorResponse struct {
@@ -39,20 +40,20 @@ func (sh *ShuttleClient) post(ctx context.Context, task string, contentType stri
 	switch v := payload.(type) {
 	case []byte:
 		rBody := &bytes.Buffer{}
-	writer := multipart.NewWriter(rBody)
+		writer := multipart.NewWriter(rBody)
 
-	// Add the audio data to the form
-	part, err := writer.CreateFormFile("file", "audio.mp3")
-	if err != nil {
-		fmt.Println("Error creating form file:", err)
-		return nil, err
-	}
-	_, err = io.Copy(part, bytes.NewReader(v))
-	if err != nil {
-		fmt.Println("Error copying audio data to form:", err)
-		return nil, err
-	}
-	body = io.NopCloser(body)
+		// Add the audio data to the form
+		part, err := writer.CreateFormFile("file", "audio.mp3")
+		if err != nil {
+			fmt.Println("Error creating form file:", err)
+			return nil, err
+		}
+		_, err = io.Copy(part, bytes.NewReader(v))
+		if err != nil {
+			fmt.Println("Error copying audio data to form:", err)
+			return nil, err
+		}
+		body = io.NopCloser(body)
 	default:
 		jsonBody, err := json.Marshal(payload)
 		if err != nil {
@@ -95,7 +96,6 @@ func (sh *ShuttleClient) post(ctx context.Context, task string, contentType stri
 
 	return resBody, nil
 }
-
 
 func (oc *ShuttleClient) resolveURL(task string) string {
 

@@ -1,11 +1,13 @@
 package shuttle
+
 import (
 	"context"
 	"encoding/json"
 	"errors"
 )
+
 type ImageRequest struct {
-	Model string `json:"model"`
+	Model  string `json:"model"`
 	Prompt string `json:"prompt"`
 }
 type ImageResponse struct {
@@ -22,7 +24,7 @@ func (sh *ShuttleClient) ImageGeneration(ctx context.Context, req *ImageRequest)
 	if req.Model == "" {
 		req.Model = "turbovision-xl"
 	}
-	body, err := sh.post(ctx, "/v1/images/generations","application/json",  req)
+	body, err := sh.post(ctx, "/v1/images/generations", "application/json", req)
 	if err != nil {
 		return nil, err
 	}

@@ -1,9 +1,11 @@
 package shuttle
+
 import (
 	"context"
 	"encoding/json"
 	"errors"
 )
+
 type AudioGenRequest struct {
 	//required
 	Input string `json:"input"`
@@ -23,6 +25,7 @@ type AudioGenResponse struct {
 	Model     string `json:"model"`
 	Chars     int    `json:"chars"`
 }
+
 func (sh *ShuttleClient) AudioGeneration(ctx context.Context, req *AudioGenRequest) (*AudioGenResponse, error) {
 	if len(req.Input) == 0 {
 		return nil, errors.New("input text is required")

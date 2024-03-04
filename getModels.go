@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 )
+
 //example of endpoint: /v1/images/generations
 type ModelResponse []struct {
 	Data []struct {

@@ -1,9 +1,11 @@
 package shuttle
+
 import (
-	"encoding/json"
 	"context"
+	"encoding/json"
 	"errors"
 )
+
 type ChatRequest struct {
 	//Required
 	Messages []ChatMessage `json:"messages"`
@@ -64,6 +66,7 @@ type ChatResponse struct {
 		TotalTokens      int `json:"total_tokens"`
 	} `json:"usage"`
 }
+
 func (sh *ShuttleClient) ChatCompletion(ctx context.Context, req *ChatRequest) (*ChatResponse, error) {
 	if len(req.Messages) == 0 {
 		return nil, errors.New("input text is required")
@@ -82,4 +85,3 @@ func (sh *ShuttleClient) ChatCompletion(ctx context.Context, req *ChatRequest) (
 
 	return &chatResponse, nil
 }
-
