@@ -8,7 +8,7 @@
 go get github.com/charlesozo/go-shuttleai
 ```
 ## Shuttle AI documentation
-> Visit [Discord server](https://discord.gg/shuttleai "Visit ShuttleAi discord server") to get the $OXYGEN_API_KEY and  Run `/getkey` command in the Discord server.
+> Visit [Discord server](https://discord.gg/shuttleai "Visit ShuttleAi discord server") to get the $SHUTTLE_API_KEY and  Run `/getkey` command in the Discord server.
 
 ___[shuttle api docs](https://docs.shuttleai.app/ "Visit ShuttleAi")___
 
@@ -24,9 +24,9 @@ import (
 )
 
 func main(){
-    client := shuttleai.NewClient(os.getenv("OXYGEN_API_TOKEN"))
-	response, err := client.ChatCompletion(context.Background(), &oxygenai.ChatRequest{
-		Messages: []oxygenai.ChatMessage{
+    client := shuttleai.NewClient(os.getenv("SHUTTLE_API_TOKEN"))
+	response, err := client.ChatCompletion(context.Background(), &shuttleai.ChatRequest{
+		Messages: []shuttleai.ChatMessage{
 		  {
 			Role: "user",
 			Content: "write an essay on global warming",
